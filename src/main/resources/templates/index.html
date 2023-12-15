@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Mercadinho Santa Cruz</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            * { margin-top: 15px }
+            h1, h3 { text-align: center }
+            table { width: 100%; border-collapse: collapse; }
+            th { border: 1px solid gray; }
+        </style>
+    </head>
+    <body>
+        <h1>Caixa do Mercadinho Santa Cruz</h1>
+        <h3>Produtos</h3>
+        <form th:action="${p == null ? '/adicionar' : '/atualizar'}" method="POST">
+            <input th:if="${p != null}"
+                type="hidden" name="id"
+                th:value="${p.getId()}">
+            <label>Nome: </label>            
+            <input type="text" name="nome"
+                   required maxlength="100"
+                   th:value="${p?.getNome()}"><br>
+            <label>Quantidade: </label>
+            <input type="number" name="qtd"
+                   required
+                   th:value="${p?.getQtd()}"><br>
+            <label>Preço</label>
+            <input type="text" name="preco"
+                   required
+                   th:value="${p?.getPreco()}"><br>
+            <button type="submit"
+                    th:text="${p == null ? 'Adicionar' : 'Atualizar'}"></button>
+        </form>
+        <a href="/">Novo Produto</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                    <th>Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="produto : ${produtos}">
+                    <td th:text="${produto.getNome()}"></td>
+                    <td th:text="${'R$ ' + produto.getPreco()}"></td>
+                    <td th:text="${produto.getQtd()}"></td>
+                    <td th:text="${'R$ ' + produto.getPreco() * produto.getQtd()}"></td>
+                    <td>
+                        <a th:href="${'/excluir?id=' + produto.getId()}">Excluir</a>
+                        <a th:href="${'/editar?id=' + produto.getId()}">Editar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
